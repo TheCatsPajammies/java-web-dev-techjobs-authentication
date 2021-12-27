@@ -1,15 +1,21 @@
 package org.launchcode.javawebdevtechjobsauthentication.controllers;
 
+import org.launchcode.javawebdevtechjobsauthentication.models.User;
 import org.launchcode.javawebdevtechjobsauthentication.models.data.JobRepository;
 import org.launchcode.javawebdevtechjobsauthentication.models.Job;
+import org.launchcode.javawebdevtechjobsauthentication.models.data.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Optional;
+
 
 /**
  * Created by LaunchCode
@@ -20,9 +26,14 @@ public class HomeController {
     @Autowired
     private JobRepository jobRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @RequestMapping("")
-    public String index(Model model) {
+    public String index(Model model, HttpSession session) {
         model.addAttribute("jobs", jobRepository.findAll());
+        model.addAttribute("userID", session.getAttribute("user"));
+        model.addAttribute("username", session.getAttribute("username"));
         return "index";
     }
 
